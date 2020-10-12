@@ -1,0 +1,13 @@
+{
+    "name": "sistempintar/e-voting",
+    "description": "Aplikasi Voting berbasis Website",
+    "license": "",
+    "authors": [{
+        "name": "rickyjulpiter",
+        "email": "rickyjulpiter14@gmail.com"
+    }],
+    "minimum-stability": "dev",
+    "require": {
+        "twbs/bootstrap": "^5.0@alpha"
+    }
+}
