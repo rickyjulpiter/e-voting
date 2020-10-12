@@ -15,36 +15,41 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
-            aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
         <a href="./" class="navbar-brand" href="#">E-Voting</a>
-
-        <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link" href="./">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="./organization">Organization</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="./voters">Voters</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Candidate</a>
-                </li>
-            </ul>
-        </div>
     </nav>
     <div class="container mt-4">
+        <h3 class="mb-3">Welcome</h3>
         <div class="row">
             <div class="col-md-4 mb-1">
-                <div class="card mb-3">
-                    <img src="admin/assets/sistempintar.png" class="card-img-top img-fluid text-center"
-                        style="width: 100%;" alt="...">
+                <div class="card mb-3 bg-secondary text-white">
+                    <div class="card-body">
+                        Login as Administrator
+                        <span class="badge badge-info float-right font-italic mt-1">
+                            <a href="administrator" class="text-white">click here</a>
+                        </span>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-4 mb-1">
+                <div class="card mb-3 bg-secondary text-white">
+                    <div class="card-body">
+                        Login as Organization
+                        <span class="badge badge-primary float-right font-italic mt-1">
+                            <a href="organization" class="text-white">click here</a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-1">
+                <div class="card mb-3 bg-secondary text-white">
+                    <div class="card-body">
+                        Login as Voters
+                        <span class="badge badge-success float-right font-italic mt-1">
+                            <a href="voters" class="text-white">click here</a>
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
