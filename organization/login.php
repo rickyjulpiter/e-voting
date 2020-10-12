@@ -8,26 +8,21 @@ if (isset($_POST['btn-login'])) {
     $username = $_POST['username'];
     $password = hashSHA384($_POST['password']);
 
-    $sql = $pdo->prepare("SELECT * FROM admin WHERE BINARY username=:username AND BINARY password=:password");
+    $sql = $pdo->prepare("SELECT * FROM organizations WHERE BINARY username=:username AND BINARY password=:password");
     $sql->bindParam(':username', $username);
     $sql->bindParam(':password', $password);
     if ($sql->execute()) {
         $data = $sql->fetch();
         if ($data > 0) {
             //jika ada usernya
-            $_SESSION['admin-login'] = true;
+            $_SESSION['organization-login'] = true;
             $_SESSION['username'] = encodeURL($data['username']);
-            header("Location: organization");
+            $_SESSION['organization_id'] = encodeURL($data['id']);
+            header("Location: election");
             exit();
         } else {
             //jika tidak ada usernya
-            $_SESSION['message'] = '
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <span class="text-secondary">Sorry, your username or password not found</span>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>';
+            message_failed("Sorry, your username or password not found");
             header("Location: login ");
             exit();
         }
@@ -48,19 +43,16 @@ if (isset($_POST['btn-login'])) {
                     <div class="card-body">
                         <form method="POST">
                             <?php
-                            if (isset($_SESSION['message'])) {
-                                echo $_SESSION['message'];
-                                unset($_SESSION['message']);
-                            }
+                            message_check();
                             ?>
                             <div class="form-group">
                                 <label>Username</label>
                                 <input type="text" class="form-control" name="username"
-                                    placeholder="Please enter administrator username" required>
+                                    placeholder="Please enter organization username" required>
                             </div>
                             <div class="form-group">
                                 <label>Password</label>
-                                <input type="password" class="form-control" placeholder="Password for administrator"
+                                <input type="password" class="form-control" placeholder="Password for organization"
                                     name="password" required>
                             </div>
                             <button type="submit" class="btn btn-primary float-right" name="btn-login">Login</button>

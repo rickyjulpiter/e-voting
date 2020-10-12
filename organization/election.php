@@ -3,70 +3,55 @@
 
 <?php
 include('template/head.php');
-// adminSession($_SESSION);
+adminOrganization($_SESSION);
 
-if (isset($_POST['btn-add-faculty'])) {
-    $name = htmlentities($_POST['faculty-name']);
+if (isset($_POST['btn-add-election'])) {
+    $name = htmlentities($_POST['election-name']);
+    $organization_id = decodeURL($_SESSION['organization_id']);
+    $date_start = htmlentities($_POST['date_start']);
+    $time_start = htmlentities($_POST['time_start']);
+    $date_end = htmlentities($_POST['date_end']);
+    $time_end = htmlentities($_POST['time_end']);
 
-    $sql = $pdo->prepare("SELECT * FROM faculty WHERE name = :name");
-    $sql->bindParam(':name', $name);
-    $sql->execute();
-    $data = $sql->fetch(PDO::FETCH_ASSOC);
-    if ($data > 0) {
-        //jika nama fakultas sudah ada, aktifkan kembali
-        if ($data['status'] == 0) {
-            $sql = $pdo->prepare("UPDATE faculty SET status = 1 WHERE name = :name");
-            $sql->bindParam(':name', $name);
-            if ($sql->execute()) {
-                message_success("Successfully added faculty");
-            }
-        } else {
-            message_success("Faculty already on list");
-        }
-        header("Location: faculty");
-        exit();
+    $query = "INSERT INTO election (name, date_start, date_end, time_start, time_end, organization) VALUES ('$name', '$date_start', '$date_end', '$time_start', '$time_end' ,'$organization_id')";
+    $sql = $pdo->prepare($query);
+    if ($sql->execute()) {
+        message_success("Successfully add election");
     } else {
-        $query = "INSERT INTO faculty (name) VALUES (:name)";
-        $sql = $pdo->prepare($query);
-        $sql->bindParam(':name', $name);
-        if ($sql->execute()) {
-            message_success("Successfully added faculty");
-        } else {
-            message_failed("Sorry, failed added faculty");
-        }
-        header("Location: faculty");
-        exit();
+        message_failed("Sorry, failed added election");
     }
+    header("Location: election");
+    exit();
 }
 
-if (isset($_POST['btn-edit-faculty'])) {
+if (isset($_POST['btn-edit-election'])) {
     $id = decodeURL($_GET['target']);
-    $name = htmlentities($_POST['faculty-name']);
+    $name = htmlentities($_POST['election-name']);
 
-    $query = "UPDATE faculty SET name= :name WHERE id=:id";
+    $query = "UPDATE election SET name= :name WHERE id=:id";
     $sql = $pdo->prepare($query);
     $sql->bindParam(':id', $id);
     $sql->bindParam(':name', $name);
     if ($sql->execute()) {
-        message_success("Successfully edit faculty");
+        message_success("Successfully edit election");
     } else {
-        message_failed("Sorry, failed edit faculty");
+        message_failed("Sorry, failed edit election");
     }
-    header("Location: faculty");
+    header("Location: election");
     exit();
 }
 
 if (isset($_GET['delete'])) {
     $id = htmlentities(decodeURL($_GET['target']));
-    $query = "UPDATE faculty SET status = 0 WHERE id=:id";
+    $query = "UPDATE election SET status = 0 WHERE id=:id";
     $sql = $pdo->prepare($query);
     $sql->bindParam(':id', $id);
     if ($sql->execute()) {
-        message_success("Successfully delete faculty");
+        message_success("Successfully delete election");
     } else {
-        message_success("Failed delete faculty");
+        message_success("Failed delete election");
     }
-    header("Location: faculty");
+    header("Location: election");
     exit();
 }
 ?>
@@ -78,7 +63,7 @@ if (isset($_GET['delete'])) {
             <div class="col-md-8">
                 <div class="card mb-3">
                     <div class="card-header">
-                        <span class="badge badge-primary p-2">Faculty List</span>
+                        <span class="badge badge-primary p-2">Election List</span>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -87,18 +72,28 @@ if (isset($_GET['delete'])) {
                                     <tr>
                                         <th>No</th>
                                         <th>Name</th>
+                                        <th>Date Start</th>
+                                        <th>Time Start</th>
+                                        <th>Date End</th>
+                                        <th>Time End</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
                                     $no = 1;
-                                    $result = $pdo->query("SELECT * FROM faculty WHERE status = 1 ORDER BY id DESC");
+                                    $organization_id = decodeURL($_SESSION['organization_id']);
+                                    $query = "SELECT * FROM election WHERE organization = '$organization_id' ORDER BY id DESC";
+                                    $result = $pdo->query($query);
                                     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                                     ?>
                                     <tr>
                                         <td><?= $no++ ?></td>
                                         <td><?= $row['name'] ?></td>
+                                        <td><?= $row['date_start'] ?></td>
+                                        <td><?= $row['time_start'] ?></td>
+                                        <td><?= $row['date_end'] ?></td>
+                                        <td><?= $row['time_end'] ?></td>
                                         <td>
                                             <a href="?edit&target=<?= encodeURL($row['id']) ?>"
                                                 class="btn btn-outline-primary btn-sm">Edit</a>
@@ -115,9 +110,9 @@ if (isset($_GET['delete'])) {
             </div>
             <?php
             if (isset($_GET['edit'])) {
-                include("components/faculty/faculty_edit.php");
+                include("components/election/election_edit.php");
             } else {
-                include("components/faculty/faculty_add.php");
+                include("components/election/election_add.php");
             }
             ?>
         </div>

@@ -16,8 +16,8 @@ $data = $sql->fetch();
                 message_check();
                 ?>
                 <div class="form-group">
-                    <label>Faculty Name</label>
-                    <input type="text" name="faculty-name" class="form-control" placeholder="Please enter faculty name"
+                    <label>Name</label>
+                    <input type="text" name="faculty-name" class="form-control" placeholder="Please enter election name"
                         value="<?= $data['name'] ?>" required>
                 </div>
                 <button type="submit" name="btn-edit-faculty" class="btn btn-info float-right">Edit

@@ -9,7 +9,7 @@ if (isset($_POST['btn-add-organizations'])) {
     $name = htmlentities($_POST['organization-name']);
     $email = htmlentities($_POST['organization-email']);
     $username = htmlentities($_POST['organization-username']);
-    $password = htmlentities($_POST['organization-password']);
+    $password = hashSHA384(htmlentities($_POST['organization-password']));
 
     $sql = $pdo->prepare("SELECT * FROM organizations WHERE email = :email OR username = :username");
     $sql->bindParam(':email', $email);
@@ -18,15 +18,7 @@ if (isset($_POST['btn-add-organizations'])) {
     $data = $sql->fetch(PDO::FETCH_ASSOC);
     if ($data > 0) {
         //username atau email sudah digunakan
-        $_SESSION['message'] = '
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <span class="text-secondary">Sorry, your email or username already used</span>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>';
-        header("Location: organization");
-        exit();
+        message_failed("Sorry, your email or username already used");
     } else {
         $query = "INSERT INTO organizations (name, email, username, password) VALUES (:name, :email, :username, :password)";
         $sql = $pdo->prepare($query);
@@ -35,27 +27,13 @@ if (isset($_POST['btn-add-organizations'])) {
         $sql->bindParam(':username', $username);
         $sql->bindParam(':password', $password);
         if ($sql->execute()) {
-            $_SESSION['message'] = '
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <span class="text-secondary">Successfully added organization</span>
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>';
-            header("Location: organization");
-            exit();
+            message_success("Successfully added organization");
         } else {
-            $_SESSION['message'] = '
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <span class="text-secondary">Sorry, failed added organizations</span>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>';
-            header("Location: organization");
-            exit();
+            message_failed("Sorry, failed added organizations");
         }
     }
+    header("Location: organization");
+    exit();
 }
 
 if (isset($_POST['btn-edit-organizations'])) {
@@ -63,7 +41,7 @@ if (isset($_POST['btn-edit-organizations'])) {
     $name = htmlentities($_POST['organization-name']);
     $email = htmlentities($_POST['organization-email']);
     $username = htmlentities($_POST['organization-username']);
-    $password = htmlentities($_POST['organization-password']);
+    $password = hashSHA384(htmlentities($_POST['organization-password']));
 
     $query = "UPDATE organizations SET name= :name, email= :email, username= :username, password= :password WHERE id=:id";
     $sql = $pdo->prepare($query);
@@ -73,26 +51,12 @@ if (isset($_POST['btn-edit-organizations'])) {
     $sql->bindParam(':username', $username);
     $sql->bindParam(':password', $password);
     if ($sql->execute()) {
-        $_SESSION['message'] = '
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <span class="text-secondary">Successfully update organization</span>
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>';
-        header("Location: organization");
-        exit();
+        message_success("Successfully update organization");
     } else {
-        $_SESSION['message'] = '
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <span class="text-secondary">Sorry, failed edit organizations</span>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>';
-        header("Location: organization");
-        exit();
+        message_failed("Sorry, failed edit organizations");
     }
+    header("Location: organization");
+    exit();
 }
 
 if (isset($_GET['delete'])) {
@@ -101,26 +65,12 @@ if (isset($_GET['delete'])) {
     $sql = $pdo->prepare($query);
     $sql->bindParam(':id', $id);
     if ($sql->execute()) {
-        $_SESSION['message'] = '
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <span class="text-secondary">Successfully delete organization</span>
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>';
-        header("Location: organization");
-        exit();
+        message_success("Successfully delete organization");
     } else {
-        $_SESSION['message'] = '
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <span class="text-secondary">Sorry, failed delete organization</span>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>';
-        header("Location: organization");
-        exit();
+        message_failed("Sorry, failed delete organization");
     }
+    header("Location: organization");
+    exit();
 }
 ?>
 

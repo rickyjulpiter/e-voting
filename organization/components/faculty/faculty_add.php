@@ -6,10 +6,7 @@
         <div class="card-body">
             <form method="POST">
                 <?php
-                if (isset($_SESSION['message'])) {
-                    echo $_SESSION['message'];
-                    unset($_SESSION['message']);
-                }
+                message_check();
                 ?>
                 <div class="form-group">
                     <label>Name</label>
