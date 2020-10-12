@@ -1,7 +1,10 @@
 <!doctype html>
 <html lang="en">
 
-<?php include('template/head.php') ?>
+<?php
+include('template/head.php');
+adminSession($_SESSION);
+?>
 
 <body>
     <?php include('template/nav.php') ?>
