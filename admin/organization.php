@@ -5,7 +5,6 @@
 include('template/head.php');
 adminSession($_SESSION);
 
-
 if (isset($_POST['btn-add-organizations'])) {
     $name = htmlentities($_POST['organization-name']);
     $email = htmlentities($_POST['organization-email']);
@@ -46,11 +45,83 @@ if (isset($_POST['btn-add-organizations'])) {
             header("Location: organization");
             exit();
         } else {
-            echo $query;
+            $_SESSION['message'] = '
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span class="text-secondary">Sorry, failed added organizations</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>';
+            header("Location: organization");
+            exit();
         }
     }
 }
 
+if (isset($_POST['btn-edit-organizations'])) {
+    $id = decodeURL($_GET['target']);
+    $name = htmlentities($_POST['organization-name']);
+    $email = htmlentities($_POST['organization-email']);
+    $username = htmlentities($_POST['organization-username']);
+    $password = htmlentities($_POST['organization-password']);
+
+    $query = "UPDATE organizations SET name= :name, email= :email, username= :username, password= :password WHERE id=:id";
+    $sql = $pdo->prepare($query);
+    $sql->bindParam(':id', $id);
+    $sql->bindParam(':name', $name);
+    $sql->bindParam(':email', $email);
+    $sql->bindParam(':username', $username);
+    $sql->bindParam(':password', $password);
+    if ($sql->execute()) {
+        $_SESSION['message'] = '
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <span class="text-secondary">Successfully update organization</span>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>';
+        header("Location: organization");
+        exit();
+    } else {
+        $_SESSION['message'] = '
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span class="text-secondary">Sorry, failed edit organizations</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>';
+        header("Location: organization");
+        exit();
+    }
+}
+
+if (isset($_GET['delete'])) {
+    $id = htmlentities(decodeURL($_GET['target']));
+    $query = "UPDATE organizations SET status = 0 WHERE id=:id";
+    $sql = $pdo->prepare($query);
+    $sql->bindParam(':id', $id);
+    if ($sql->execute()) {
+        $_SESSION['message'] = '
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <span class="text-secondary">Successfully delete organization</span>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>';
+        header("Location: organization");
+        exit();
+    } else {
+        $_SESSION['message'] = '
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span class="text-secondary">Sorry, failed delete organization</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>';
+        header("Location: organization");
+        exit();
+    }
+}
 ?>
 
 <body>
@@ -77,15 +148,14 @@ if (isset($_POST['btn-add-organizations'])) {
                                 <tbody>
                                     <?php
                                     $no = 1;
-                                    $result = $pdo->query("SELECT * FROM organizations ORDER BY id DESC");
+                                    $result = $pdo->query("SELECT * FROM organizations WHERE status = 1 ORDER BY id DESC");
                                     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-
                                     ?>
                                     <tr>
                                         <td><?= $no++ ?></td>
                                         <td><?= $row['name'] ?></td>
                                         <td><?= $row['email'] ?></td>
-                                        <td>
+                                        <td class="text-center">
                                             <?php
                                                 if ($row['status'] == 1) {
                                                     echo "<span class='badge badge-info'>Active</span>";
@@ -95,8 +165,10 @@ if (isset($_POST['btn-add-organizations'])) {
                                                 ?>
                                         </td>
                                         <td>
-                                            <a href="" class="btn btn-outline-primary btn-sm">Edit</a>
-                                            <a href="" class="btn btn-outline-danger btn-sm">Delete</a>
+                                            <a href="?edit&target=<?= encodeURL($row['id']) ?>"
+                                                class="btn btn-outline-primary btn-sm">Edit</a>
+                                            <a href="?delete&target=<?= encodeURL($row['id']) ?>"
+                                                class="btn btn-outline-danger btn-sm">Delete</a>
                                         </td>
                                     </tr>
                                     <?php } ?>
@@ -106,49 +178,15 @@ if (isset($_POST['btn-add-organizations'])) {
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="badge badge-success p-2">Add Organization</span>
-                    </div>
-                    <div class="card-body">
-                        <form method="POST">
-                            <?php
-                            if (isset($_SESSION['message'])) {
-                                echo $_SESSION['message'];
-                                unset($_SESSION['message']);
-                            }
-                            ?>
-                            <div class="form-group">
-                                <label>Organization Name</label>
-                                <input type="text" name="organization-name" class="form-control"
-                                    placeholder="Please enter organization name" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Email</label>
-                                <input type="email" class="form-control" name="organization-email"
-                                    placeholder="Please enter organization email" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Admininistrator</label>
-                                <input type="text" class="form-control" name="organization-username"
-                                    placeholder="Please enter admin organization username" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Password</label>
-                                <input type="password" name="organization-password" class="form-control"
-                                    placeholder="Password for administrator" required>
-                            </div>
-                            <button type="submit" name="btn-add-organizations" class="btn btn-info float-right">Add
-                            </button>
-                        </form>
-                    </div>
-
-                </div>
-            </div>
+            <?php
+            if (isset($_GET['edit'])) {
+                include("components/organization/organization_edit.php");
+            } else {
+                include("components/organization/organization_add.php");
+            }
+            ?>
         </div>
     </div>
-
     <?php include('template/script.php') ?>
     <script>
     $(document).ready(function() {
