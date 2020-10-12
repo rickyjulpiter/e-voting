@@ -22,7 +22,7 @@
         <h3 class="mb-3">Welcome</h3>
         <div class="row">
             <div class="col-md-4 mb-1">
-                <div class="card mb-3 bg-secondary text-white">
+                <div class="card mb-3">
                     <div class="card-body">
                         Login as Administrator
                         <span class="badge badge-info float-right font-italic mt-1">
@@ -33,7 +33,7 @@
                 </div>
             </div>
             <div class="col-md-4 mb-1">
-                <div class="card mb-3 bg-secondary text-white">
+                <div class="card mb-3">
                     <div class="card-body">
                         Login as Organization
                         <span class="badge badge-primary float-right font-italic mt-1">
@@ -43,7 +43,7 @@
                 </div>
             </div>
             <div class="col-md-4 mb-1">
-                <div class="card mb-3 bg-secondary text-white">
+                <div class="card mb-3">
                     <div class="card-body">
                         Login as Voters
                         <span class="badge badge-success float-right font-italic mt-1">
