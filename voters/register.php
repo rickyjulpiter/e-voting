@@ -57,8 +57,8 @@ if (isset($_POST['btn-register'])) {
                             <div class="form-group">
                                 <label>Username</label>
                                 <input type="text" class="form-control" id="username" name="username"
-                                    placeholder="Username" required>
-                                <div id="response" class="ml-1"></div>
+                                    placeholder="Username" autocomplete="off" required>
+                                <div id="result"></div>
                             </div>
                             <div class="form-group">
                                 <label>Name</label>
@@ -93,7 +93,8 @@ if (isset($_POST['btn-register'])) {
                                 <input type="password" class="form-control" placeholder="Password" name="password"
                                     required>
                             </div>
-                            <button type="submit" class="btn btn-info btn-block" name="btn-register">Register</button>
+                            <button type="submit" id="btn-register" class="btn btn-info btn-block"
+                                name="btn-register">Register</button>
                             <small class="float-right mt-2">or <a href="./">Login Here</a> </small>
                         </form>
                     </div>
@@ -121,36 +122,33 @@ if (isset($_POST['btn-register'])) {
     }
     </script>
 
-    <script>
-    $(document).on('keyup', '#username', function() {
-        if ($('#username').val() != '' && $('#username').val().length >= 8) {
-            $('#val').val("0");
-            $.ajax({
-                url: "checkUsername.php",
-                method: "POST",
-                data: $(this).serialize(),
-                dataType: "json",
-                success: function(data) {
-                    console.log(data)
-                    if (data == 0) {
-                        $('#val').val("1");
-                        $('#response').html(
-                            '<p style="color: #339966;"><b>Your username is available.</b></p>');
-                    } else {
-                        $('#val').val("0");
-                        $('#response').html(
-                            '<p style="color: #ff0000;"><b>Your username is not available.</b></p>'
-                        );
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $('#username').keyup(function() {
+            var uname = $('#username').val();
+            if (uname == 0) {
+                $('#result').text('');
+            } else {
+                $.ajax({
+                    url: 'checkUsername.php',
+                    type: 'POST',
+                    data: 'username=' + uname,
+                    success: function(hasil) {
+                        if (hasil > 0) {
+                            document.getElementById("result").innerHTML = `
+                            <small class="text-danger">Username already taken</small>
+                            `
+                            document.getElementById("btn-register").disabled = true;
+                        } else {
+                            document.getElementById("result").innerHTML = `
+                            <small class="text-success">Username is avalaible</small>
+                            `
+                            document.getElementById("btn-register").disabled = false;
+                        }
                     }
-                }
-            })
-        } else {
-            var length = $('#username').val().length
-            $('#val').val("0");
-            $('#response').html(
-                '<small class ="text-danger" ><b>The minimum length of username is 8 character.</b></small>'
-            );
-        }
+                });
+            }
+        });
     });
     </script>
 
