@@ -20,8 +20,9 @@
                             ?>
                             <div class="form-group">
                                 <label>Username</label>
-                                <input type="text" class="form-control" name="username"
-                                    placeholder="Please enter username" required>
+                                <input type="text" class="form-control" name="username" placeholder="Username" required>
+                                <div id="response" class="ml-1"></div>
+
                             </div>
                             <div class="form-group">
                                 <label>Password</label>

@@ -56,7 +56,9 @@ if (isset($_POST['btn-register'])) {
                             ?>
                             <div class="form-group">
                                 <label>Username</label>
-                                <input type="text" class="form-control" name="username" placeholder="Username" required>
+                                <input type="text" class="form-control" id="username" name="username"
+                                    placeholder="Username" required>
+                                <div id="response" class="ml-1"></div>
                             </div>
                             <div class="form-group">
                                 <label>Name</label>
@@ -105,7 +107,6 @@ if (isset($_POST['btn-register'])) {
     function getOrg(str) {
         if (str == "") {
             document.getElementById("faculty").innerHTML = "";
-            console.log("kosong");
             return;
         } else {
             var xmlhttp = new XMLHttpRequest();
@@ -118,6 +119,39 @@ if (isset($_POST['btn-register'])) {
             xmlhttp.send();
         }
     }
+    </script>
+
+    <script>
+    $(document).on('keyup', '#username', function() {
+        if ($('#username').val() != '' && $('#username').val().length >= 8) {
+            $('#val').val("0");
+            $.ajax({
+                url: "checkUsername.php",
+                method: "POST",
+                data: $(this).serialize(),
+                dataType: "json",
+                success: function(data) {
+                    console.log(data)
+                    if (data == 0) {
+                        $('#val').val("1");
+                        $('#response').html(
+                            '<p style="color: #339966;"><b>Your username is available.</b></p>');
+                    } else {
+                        $('#val').val("0");
+                        $('#response').html(
+                            '<p style="color: #ff0000;"><b>Your username is not available.</b></p>'
+                        );
+                    }
+                }
+            })
+        } else {
+            var length = $('#username').val().length
+            $('#val').val("0");
+            $('#response').html(
+                '<small class ="text-danger" ><b>The minimum length of username is 8 character.</b></small>'
+            );
+        }
+    });
     </script>
 
 </body>
