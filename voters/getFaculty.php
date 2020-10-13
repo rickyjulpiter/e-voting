@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
 <?php include('template/head.php') ?>
-
-<body>
-    <select id="org" onchange="getOrg(this)" class="form-control" name="organization">
-        <option disabled selected value> -- select organization -- </option>
+<div class="form-group">
+    <label>Faculty</label>
+    <select class="form-control" name="faculty">
+        <option disabled selected value> -- select faculty -- </option>
         <?php
         $q = htmlentities(decodeURL($_GET['q']));
         $result = $pdo->query("SELECT * FROM faculty WHERE organization = '$q'");
@@ -15,6 +13,4 @@
         }
         ?>
     </select>
-</body>
-
-</html>
+</div>

@@ -3,6 +3,42 @@
 
 <?php include('template/head.php') ?>
 
+<?php
+
+if (isset($_POST['btn-register'])) {
+    $username = htmlentities($_POST['username']);
+    $name = htmlentities($_POST['name']);
+    $email = htmlentities($_POST['email']);
+    $phone = htmlentities($_POST['phone']);
+    $organization_id = htmlentities(decodeURL($_POST['organization']));
+    $faculty_id = htmlentities(decodeURL($_POST['faculty']));
+    $password = htmlentities(hashSHA384($_POST['password']));
+
+    $query = "INSERT INTO voters (username, password, name, email, phone, faculty_id, organization_id) VALUES (:username, :password, :name, :email, :phone, :faculty_id, :organization_id)";
+
+    // $s = "INSERT INTO voters (username, password, name, email, phone, faculty_id, organization_id) VALUES ('$username', '$password', '$name', '$email', '$phone', $faculty_id, $organization_id)";
+
+    $sql = $pdo->prepare($query);
+    $sql->bindParam(':username', $username);
+    $sql->bindParam(':name', $name);
+    $sql->bindParam(':email', $email);
+    $sql->bindParam(':phone', $phone);
+    $sql->bindParam(':organization_id', $organization_id);
+    $sql->bindParam(':faculty_id', $faculty_id);
+    $sql->bindParam(':password', $password);
+    if ($sql->execute()) {
+        message_success("Successfuly Register");
+        header("Location: ./");
+        exit();
+    } else {
+        message_failed("Failed Register");
+        header("Location: register");
+        exit();
+    }
+}
+
+?>
+
 <body>
     <?php include('template/nav.php') ?>
     <div class="container mt-4">
@@ -55,8 +91,8 @@
                                 <input type="password" class="form-control" placeholder="Password" name="password"
                                     required>
                             </div>
-                            <button type="submit" class="btn btn-info btn-block" name="btn-login">Login</button>
-                            <small class="float-right mt-2">or <a href="register">Register Here</a> </small>
+                            <button type="submit" class="btn btn-info btn-block" name="btn-register">Register</button>
+                            <small class="float-right mt-2">or <a href="./">Login Here</a> </small>
                         </form>
                     </div>
                 </div>
