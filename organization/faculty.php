@@ -3,10 +3,11 @@
 
 <?php
 include('template/head.php');
-// adminSession($_SESSION);
+adminOrganization($_SESSION);
 
 if (isset($_POST['btn-add-faculty'])) {
     $name = htmlentities($_POST['faculty-name']);
+    $max_voters = htmlentities($_POST['faculty-max-voters']);
 
     $sql = $pdo->prepare("SELECT * FROM faculty WHERE name = :name");
     $sql->bindParam(':name', $name);
@@ -26,9 +27,10 @@ if (isset($_POST['btn-add-faculty'])) {
         header("Location: faculty");
         exit();
     } else {
-        $query = "INSERT INTO faculty (name) VALUES (:name)";
+        $query = "INSERT INTO faculty (name, max_voters) VALUES (:name, :max_voters)";
         $sql = $pdo->prepare($query);
         $sql->bindParam(':name', $name);
+        $sql->bindParam(':max_voters', $max_voters);
         if ($sql->execute()) {
             message_success("Successfully added faculty");
         } else {
@@ -40,13 +42,15 @@ if (isset($_POST['btn-add-faculty'])) {
 }
 
 if (isset($_POST['btn-edit-faculty'])) {
-    $id = decodeURL($_GET['target']);
+    $id = htmlentities(decodeURL($_GET['target']));
     $name = htmlentities($_POST['faculty-name']);
+    $max_voters = htmlentities($_POST['faculty-max-voters']);
 
-    $query = "UPDATE faculty SET name= :name WHERE id=:id";
+    $query = "UPDATE faculty SET name= :name, max_voters= :max_voters WHERE id=:id";
     $sql = $pdo->prepare($query);
     $sql->bindParam(':id', $id);
     $sql->bindParam(':name', $name);
+    $sql->bindParam(':max_voters', $max_voters);
     if ($sql->execute()) {
         message_success("Successfully edit faculty");
     } else {
@@ -87,6 +91,7 @@ if (isset($_GET['delete'])) {
                                     <tr>
                                         <th>No</th>
                                         <th>Name</th>
+                                        <th>Max Accepted Voters</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -99,6 +104,7 @@ if (isset($_GET['delete'])) {
                                     <tr>
                                         <td><?= $no++ ?></td>
                                         <td><?= $row['name'] ?></td>
+                                        <td><?= $row['max_voters'] ?></td>
                                         <td>
                                             <a href="?edit&target=<?= encodeURL($row['id']) ?>"
                                                 class="btn btn-outline-primary btn-sm">Edit</a>

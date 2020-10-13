@@ -5,53 +5,52 @@
 include('template/head.php');
 adminOrganization($_SESSION);
 
-if (isset($_POST['btn-add-election'])) {
-    $name = htmlentities($_POST['election-name']);
+if (isset($_POST['btn-add-candidate'])) {
+    $name = htmlentities($_POST['candidate-name']);
     $organization_id = decodeURL($_SESSION['organization_id']);
-    $date_start = htmlentities($_POST['date_start']);
-    $time_start = htmlentities($_POST['time_start']);
-    $date_end = htmlentities($_POST['date_end']);
-    $time_end = htmlentities($_POST['time_end']);
+    $notes = htmlentities($_POST['candidate-notes']);
 
-    $query = "INSERT INTO election (name, date_start, date_end, time_start, time_end, organization_id) VALUES ('$name', '$date_start', '$date_end', '$time_start', '$time_end' ,'$organization_id')";
+    $query = "INSERT INTO candidate (name, notes, organization_id) VALUES ('$name', '$notes' ,'$organization_id')";
     $sql = $pdo->prepare($query);
     if ($sql->execute()) {
-        message_success("Successfully add election");
+        message_success("Successfully add candidate");
     } else {
-        message_failed("Sorry, failed added election");
+        message_failed("Sorry, failed added candidate");
     }
-    header("Location: election");
+    header("Location: candidate");
     exit();
 }
 
-if (isset($_POST['btn-edit-election'])) {
+if (isset($_POST['btn-edit-candidate'])) {
     $id = decodeURL($_GET['target']);
-    $name = htmlentities($_POST['election-name']);
+    $name = htmlentities($_POST['candidate-name']);
+    $notes = htmlentities($_POST['candidate-notes']);
 
-    $query = "UPDATE election SET name= :name WHERE id=:id";
+    $query = "UPDATE candidate SET name= :name, notes= :notes WHERE id=:id";
     $sql = $pdo->prepare($query);
     $sql->bindParam(':id', $id);
     $sql->bindParam(':name', $name);
+    $sql->bindParam(':notes', $notes);
     if ($sql->execute()) {
-        message_success("Successfully edit election");
+        message_success("Successfully edit candidate");
     } else {
-        message_failed("Sorry, failed edit election");
+        message_failed("Sorry, failed edit candidate");
     }
-    header("Location: election");
+    header("Location: candidate");
     exit();
 }
 
 if (isset($_GET['delete'])) {
     $id = htmlentities(decodeURL($_GET['target']));
-    $query = "UPDATE election SET status = 0 WHERE id=:id";
+    $query = "UPDATE candidate SET status = 0 WHERE id=:id";
     $sql = $pdo->prepare($query);
     $sql->bindParam(':id', $id);
     if ($sql->execute()) {
-        message_success("Successfully delete election");
+        message_success("Successfully delete candidate");
     } else {
-        message_failed("Failed delete election");
+        message_success("Failed delete candidate");
     }
-    header("Location: election");
+    header("Location: candidate");
     exit();
 }
 ?>
@@ -63,7 +62,7 @@ if (isset($_GET['delete'])) {
             <div class="col-md-8">
                 <div class="card mb-3">
                     <div class="card-header">
-                        <span class="badge badge-primary p-2">Election List</span>
+                        <span class="badge badge-primary p-2">Candidate List</span>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -72,10 +71,7 @@ if (isset($_GET['delete'])) {
                                     <tr>
                                         <th>No</th>
                                         <th>Name</th>
-                                        <th>Date Start</th>
-                                        <th>Time Start</th>
-                                        <th>Date End</th>
-                                        <th>Time End</th>
+                                        <th>Notes</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -83,17 +79,14 @@ if (isset($_GET['delete'])) {
                                     <?php
                                     $no = 1;
                                     $organization_id = decodeURL($_SESSION['organization_id']);
-                                    $query = "SELECT * FROM election WHERE organization_id = '$organization_id' AND status = 1 ORDER BY id DESC";
+                                    $query = "SELECT * FROM candidate WHERE organization_id = '$organization_id' AND status = 1 ORDER BY id DESC";
                                     $result = $pdo->query($query);
                                     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                                     ?>
                                     <tr>
                                         <td><?= $no++ ?></td>
                                         <td><?= $row['name'] ?></td>
-                                        <td><?= $row['date_start'] ?></td>
-                                        <td><?= $row['time_start'] ?></td>
-                                        <td><?= $row['date_end'] ?></td>
-                                        <td><?= $row['time_end'] ?></td>
+                                        <td><?= $row['notes'] ?></td>
                                         <td>
                                             <a href="?edit&target=<?= encodeURL($row['id']) ?>"
                                                 class="btn btn-outline-primary btn-sm">Edit</a>
@@ -110,9 +103,9 @@ if (isset($_GET['delete'])) {
             </div>
             <?php
             if (isset($_GET['edit'])) {
-                include("components/election/election_edit.php");
+                include("components/candidate/candidate_edit.php");
             } else {
-                include("components/election/election_add.php");
+                include("components/candidate/candidate_add.php");
             }
             ?>
         </div>

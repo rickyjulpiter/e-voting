@@ -11,23 +11,7 @@
                 <a class="nav-link" href="./">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./election">Election</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="./faculty">Faculty</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="./candidate">Candidate</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="./voters">Voters</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Result</a>
-            </li>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="logout">Logout</a>
+                <a class="nav-link" href="./">Logout</a>
             </li>
         </ul>
     </div>

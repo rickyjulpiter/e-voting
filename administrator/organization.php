@@ -3,7 +3,7 @@
 
 <?php
 include('template/head.php');
-adminSession($_SESSION);
+adminAdministrator($_SESSION);
 
 if (isset($_POST['btn-add-organizations'])) {
     $name = htmlentities($_POST['organization-name']);

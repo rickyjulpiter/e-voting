@@ -16,14 +16,13 @@ $data = $sql->fetch();
                 message_check();
                 ?>
                 <div class="form-group">
-                    <label>Faculty Name</label>
-                    <input type="text" name="faculty-name" class="form-control" placeholder="Please enter faculty name"
+                    <label>Name</label>
+                    <input type="text" name="faculty-name" class="form-control" placeholder="Please enter election name"
                         value="<?= $data['name'] ?>" required>
                 </div>
                 <div class="form-group">
-                    <label>Max Voters Accepted</label>
-                    <input type="number" name="faculty-max-voters" class="form-control"
-                        placeholder="Please enter max voters accepted" value="<?= $data['max_voters'] ?>" required>
+                    <label>Notes</label>
+                    <textarea class="form-control" rows="3" name="candidate-notes"><?= $data['notes'] ?></textarea>
                 </div>
                 <button type="submit" name="btn-edit-faculty" class="btn btn-info float-right">Edit
                 </button>

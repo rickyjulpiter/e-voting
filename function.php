@@ -15,7 +15,7 @@ function decodeURL($url)
     return base64_decode(urldecode($url));
 }
 
-function adminSession($session)
+function adminAdministrator($session)
 {
     if ($_SESSION['admin-login'] != true) {
         header("Location: login");
