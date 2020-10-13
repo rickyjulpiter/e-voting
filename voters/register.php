@@ -4,7 +4,6 @@
 <?php include('template/head.php') ?>
 
 <?php
-
 if (isset($_POST['btn-register'])) {
     $username = htmlentities($_POST['username']);
     $name = htmlentities($_POST['name']);
@@ -14,29 +13,36 @@ if (isset($_POST['btn-register'])) {
     $faculty_id = htmlentities(decodeURL($_POST['faculty']));
     $password = htmlentities(hashSHA384($_POST['password']));
 
-    $query = "INSERT INTO voters (username, password, name, email, phone, faculty_id, organization_id) VALUES (:username, :password, :name, :email, :phone, :faculty_id, :organization_id)";
-
-    // $s = "INSERT INTO voters (username, password, name, email, phone, faculty_id, organization_id) VALUES ('$username', '$password', '$name', '$email', '$phone', $faculty_id, $organization_id)";
-
-    $sql = $pdo->prepare($query);
+    $sql = $pdo->prepare("SELECT * FROM voters WHERE username = :username");
     $sql->bindParam(':username', $username);
-    $sql->bindParam(':name', $name);
-    $sql->bindParam(':email', $email);
-    $sql->bindParam(':phone', $phone);
-    $sql->bindParam(':organization_id', $organization_id);
-    $sql->bindParam(':faculty_id', $faculty_id);
-    $sql->bindParam(':password', $password);
-    if ($sql->execute()) {
-        message_success("Successfuly Register");
-        header("Location: ./");
-        exit();
-    } else {
-        message_failed("Failed Register");
+    $sql->execute();
+    $data = $sql->fetch(PDO::FETCH_ASSOC);
+    if ($data > 0) {
+        message_failed("Username already taken");
         header("Location: register");
         exit();
+    } else {
+        $query = "INSERT INTO voters (username, password, name, email, phone, faculty_id, organization_id) VALUES (:username, :password, :name, :email, :phone, :faculty_id, :organization_id)";
+
+        $sql = $pdo->prepare($query);
+        $sql->bindParam(':username', $username);
+        $sql->bindParam(':name', $name);
+        $sql->bindParam(':email', $email);
+        $sql->bindParam(':phone', $phone);
+        $sql->bindParam(':organization_id', $organization_id);
+        $sql->bindParam(':faculty_id', $faculty_id);
+        $sql->bindParam(':password', $password);
+        if ($sql->execute()) {
+            message_success("Successfuly Register");
+            header("Location: ./");
+            exit();
+        } else {
+            message_failed("Failed Register");
+            header("Location: register");
+            exit();
+        }
     }
 }
-
 ?>
 
 <body>
