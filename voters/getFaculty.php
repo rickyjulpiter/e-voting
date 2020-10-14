@@ -5,7 +5,7 @@
         <option disabled selected value> -- select faculty -- </option>
         <?php
         $q = htmlentities(decodeURL($_GET['q']));
-        $result = $pdo->query("SELECT * FROM faculty WHERE organization = '$q'");
+        $result = $pdo->query("SELECT * FROM faculty WHERE organization_id = '$q'");
         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
             $name = $row['name'];
             $id = encodeURL($row['id']);

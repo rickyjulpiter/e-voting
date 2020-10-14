@@ -25,13 +25,16 @@ if (isset($_POST['btn-add-election'])) {
 }
 
 if (isset($_POST['btn-edit-election'])) {
-    $id = decodeURL($_GET['target']);
+    $id = htmlentities(decodeURL($_GET['target']));
     $name = htmlentities($_POST['election-name']);
+    $organization_id = decodeURL($_SESSION['organization_id']);
+    $date_start = htmlentities($_POST['date_start']);
+    $time_start = htmlentities($_POST['time_start']);
+    $date_end = htmlentities($_POST['date_end']);
+    $time_end = htmlentities($_POST['time_end']);
 
-    $query = "UPDATE election SET name= :name WHERE id=:id";
+    $query = "UPDATE election SET name= '$name', date_start= '$date_start', date_end= '$date_end', time_start= '$time_start', time_end= '$time_end' WHERE id= '$id'";
     $sql = $pdo->prepare($query);
-    $sql->bindParam(':id', $id);
-    $sql->bindParam(':name', $name);
     if ($sql->execute()) {
         message_success("Successfully edit election");
     } else {
@@ -58,7 +61,7 @@ if (isset($_GET['delete'])) {
 
 <body>
     <?php include('template/nav.php') ?>
-    <div class="container mt-4">
+    <div class="m-4">
         <div class="row">
             <div class="col-md-8">
                 <div class="card mb-3">

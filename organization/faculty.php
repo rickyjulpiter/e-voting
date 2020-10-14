@@ -4,13 +4,15 @@
 <?php
 include('template/head.php');
 adminOrganization($_SESSION);
+$organization_id = decodeURL($_SESSION['organization_id']);
 
 if (isset($_POST['btn-add-faculty'])) {
     $name = htmlentities($_POST['faculty-name']);
     $max_voters = htmlentities($_POST['faculty-max-voters']);
 
-    $sql = $pdo->prepare("SELECT * FROM faculty WHERE name = :name");
+    $sql = $pdo->prepare("SELECT * FROM faculty WHERE name = :name AND organization_id = :organization_id");
     $sql->bindParam(':name', $name);
+    $sql->bindParam(':organization_id', $organization_id);
     $sql->execute();
     $data = $sql->fetch(PDO::FETCH_ASSOC);
     if ($data > 0) {
@@ -27,10 +29,11 @@ if (isset($_POST['btn-add-faculty'])) {
         header("Location: faculty");
         exit();
     } else {
-        $query = "INSERT INTO faculty (name, max_voters) VALUES (:name, :max_voters)";
+        $query = "INSERT INTO faculty (name, max_voters, organization_id) VALUES (:name, :max_voters, :organization_id)";
         $sql = $pdo->prepare($query);
         $sql->bindParam(':name', $name);
         $sql->bindParam(':max_voters', $max_voters);
+        $sql->bindParam(':organization_id', $organization_id);
         if ($sql->execute()) {
             message_success("Successfully added faculty");
         } else {
@@ -98,7 +101,7 @@ if (isset($_GET['delete'])) {
                                 <tbody>
                                     <?php
                                     $no = 1;
-                                    $result = $pdo->query("SELECT * FROM faculty WHERE status = 1 ORDER BY id DESC");
+                                    $result = $pdo->query("SELECT * FROM faculty WHERE organization_id = '$organization_id' AND status = 1 ORDER BY id DESC");
                                     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                                     ?>
                                     <tr>

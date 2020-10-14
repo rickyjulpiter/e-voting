@@ -1,6 +1,6 @@
 <?php
 $id = htmlentities(decodeURL($_GET['target']));
-$sql = $pdo->prepare("SELECT * FROM faculty WHERE id = :id");
+$sql = $pdo->prepare("SELECT * FROM candidate WHERE id = :id");
 $sql->bindParam(':id', $id);
 $sql->execute();
 $data = $sql->fetch();
@@ -8,7 +8,7 @@ $data = $sql->fetch();
 <div class="col-md-4">
     <div class="card">
         <div class="card-header">
-            <span class="badge badge-success p-2">Edit Faculty</span>
+            <span class="badge badge-success p-2">Edit Candidate</span>
         </div>
         <div class="card-body">
             <form method="POST">
