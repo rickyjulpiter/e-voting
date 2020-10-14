@@ -5,8 +5,8 @@
 <?php
 
 if (isset($_POST['btn-login'])) {
-    $username = $_POST['username'];
-    $password = hashSHA384($_POST['password']);
+    $username = htmlentities($_POST['username']);
+    $password = hashSHA384(htmlentities($_POST['password']));
 
     $sql = $pdo->prepare("SELECT * FROM organizations WHERE BINARY username=:username AND BINARY password=:password");
     $sql->bindParam(':username', $username);

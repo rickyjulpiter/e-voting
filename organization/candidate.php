@@ -4,18 +4,19 @@
 <?php
 include('template/head.php');
 adminOrganization($_SESSION);
+$organization_id = decodeURL($_SESSION['organization_id']);
 
 if (isset($_POST['btn-add-candidate'])) {
     $name = htmlentities($_POST['candidate-name']);
-    $organization_id = decodeURL($_SESSION['organization_id']);
     $notes = htmlentities($_POST['candidate-notes']);
+    $election_id = htmlentities(decodeURL($_POST['candidate-election']));
 
-    $query = "INSERT INTO candidate (name, notes, organization_id) VALUES ('$name', '$notes' ,'$organization_id')";
+    $query = "INSERT INTO candidate (name, notes, organization_id, election_id) VALUES ('$name', '$notes' ,'$organization_id', '$election_id')";
     $sql = $pdo->prepare($query);
     if ($sql->execute()) {
         message_success("Successfully add candidate");
     } else {
-        message_failed("Sorry, failed added candidate");
+        message_failed("Failed add candidate");
     }
     header("Location: candidate");
     exit();
@@ -25,20 +26,24 @@ if (isset($_POST['btn-edit-candidate'])) {
     $id = decodeURL($_GET['target']);
     $name = htmlentities($_POST['candidate-name']);
     $notes = htmlentities($_POST['candidate-notes']);
+    $election_id = htmlentities(decodeURL($_POST['candidate-election']));
 
-    $query = "UPDATE candidate SET name= :name, notes= :notes WHERE id=:id";
+    $query = "UPDATE candidate SET name= :name, notes= :notes, election_id = :election_id WHERE id=:id";
+    $Q = "UPDATE candidate SET name= '$name', notes= '$notes', election_id = '$election_id' WHERE id='$id'";
     $sql = $pdo->prepare($query);
     $sql->bindParam(':id', $id);
     $sql->bindParam(':name', $name);
     $sql->bindParam(':notes', $notes);
+    $sql->bindParam(':election_id', $election_id);
     if ($sql->execute()) {
         message_success("Successfully edit candidate");
     } else {
-        message_failed("Sorry, failed edit candidate");
+        message_failed($Q);
     }
     header("Location: candidate");
     exit();
 }
+
 
 if (isset($_GET['delete'])) {
     $id = htmlentities(decodeURL($_GET['target']));
@@ -57,7 +62,7 @@ if (isset($_GET['delete'])) {
 
 <body>
     <?php include('template/nav.php') ?>
-    <div class="container mt-4">
+    <div class="m-4">
         <div class="row">
             <div class="col-md-8">
                 <div class="card mb-3">
@@ -71,6 +76,7 @@ if (isset($_GET['delete'])) {
                                     <tr>
                                         <th>No</th>
                                         <th>Name</th>
+                                        <th>Election</th>
                                         <th>Notes</th>
                                         <th>Action</th>
                                     </tr>
@@ -78,14 +84,14 @@ if (isset($_GET['delete'])) {
                                 <tbody>
                                     <?php
                                     $no = 1;
-                                    $organization_id = decodeURL($_SESSION['organization_id']);
-                                    $query = "SELECT * FROM candidate WHERE organization_id = '$organization_id' AND status = 1 ORDER BY id DESC";
+                                    $query = "SELECT A.name, A.notes, A.id, B.name AS electionName FROM candidate A, election B WHERE A.organization_id = '$organization_id' AND A.status = 1 AND A.election_id = B.id ORDER BY A.id DESC";
                                     $result = $pdo->query($query);
                                     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                                     ?>
                                     <tr>
                                         <td><?= $no++ ?></td>
                                         <td><?= $row['name'] ?></td>
+                                        <td><?= $row['electionName'] ?></td>
                                         <td><?= $row['notes'] ?></td>
                                         <td>
                                             <a href="?edit&target=<?= encodeURL($row['id']) ?>"

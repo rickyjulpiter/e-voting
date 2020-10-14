@@ -31,6 +31,14 @@ function adminOrganization($session)
     }
 }
 
+function votersOrganization($session)
+{
+    if ($_SESSION['voters-login'] != true) {
+        header("Location: ./");
+        exit();
+    }
+}
+
 function message_success($message)
 {
     $_SESSION['message'] = '

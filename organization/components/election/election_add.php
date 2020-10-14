@@ -29,6 +29,7 @@
                     <label>Time End</label>
                     <input type="time" name="time_end" class="form-control" required>
                 </div>
+
                 <button type="submit" name="btn-add-election" class="btn btn-info float-right">Add
                 </button>
             </form>

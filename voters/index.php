@@ -1,7 +1,36 @@
 <!doctype html>
 <html lang="en">
 
-<?php include('template/head.php') ?>
+<?php
+include('template/head.php');
+
+if (isset($_POST['btn-login'])) {
+    $username = htmlentities($_POST['username']);
+    $password = hashSHA384(htmlentities($_POST['password']));
+
+    $sql = $pdo->prepare("SELECT * FROM voters WHERE BINARY username=:username AND BINARY password=:password");
+    $sql->bindParam(':username', $username);
+    $sql->bindParam(':password', $password);
+    if ($sql->execute()) {
+        $data = $sql->fetch();
+        if ($data > 0) {
+            //jika ada usernya
+            $_SESSION['voters-login'] = true;
+            $_SESSION['username'] = encodeURL($data['username']);
+            $_SESSION['voters_id'] = encodeURL($data['id']);
+            $_SESSION['organization_id'] = encodeURL($data['organization_id']);
+            $_SESSION['faculty_id'] = encodeURL($data['faculty_id']);
+            header("Location: election");
+            exit();
+        } else {
+            //jika tidak ada usernya
+            message_failed("Sorry, your username or password not found");
+            header("Location: login ");
+            exit();
+        }
+    }
+}
+?>
 
 <body>
     <?php include('template/nav.php') ?>
@@ -21,8 +50,6 @@
                             <div class="form-group">
                                 <label>Username</label>
                                 <input type="text" class="form-control" name="username" placeholder="Username" required>
-                                <div id="response" class="ml-1"></div>
-
                             </div>
                             <div class="form-group">
                                 <label>Password</label>
