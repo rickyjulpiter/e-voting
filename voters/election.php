@@ -23,19 +23,27 @@ $organization_id = decodeURL($_SESSION['organization_id']);
                 $time_end = $row['time_end'];
 
                 $date_now = date("Y-m-d");
+                $time_now = date("h:i:s");
 
-                if ($date_start < $date_now && $date_end < $date_now) {
-                    $election_status = "End";
-                    $class = "secondary";
-                    $href = "#";
-                } elseif ($date_start > $date_now && $date_end > $date_now) {
-                    $election_status = "Coming Soon";
-                    $class = "primary";
-                    $href = "#";
-                } else {
+                $datetime_start = date('Y-m-d H:i:s', strtotime("$date_start $time_start"));
+                $datetime_end = date('Y-m-d H:i:s', strtotime("$date_end $time_end"));
+                $datetime_now = date('Y-m-d H:i:s', strtotime("$date_now $time_now"));
+
+                if ($datetime_start <= $datetime_now && $datetime_end >= $datetime_now) {
+                    //sedang berlangsung
                     $election_status = "Live";
                     $class = "info";
                     $href = "voting?target=" . encodeURL("apa lihat-lihat?") . "&message=" . encodeURL("udahlah gausah di cari tau lagi") . "&eid=" . encodeURL($row['id']) . "&id=" . encodeURL(hashSHA384("Sistem Pintar"));
+                } elseif ($datetime_start > $datetime_now && $datetime_end > $datetime_now) {
+                    //coming soon
+                    $election_status = "Coming Soon";
+                    $class = "primary";
+                    $href = "#";
+                } elseif ($datetime_start < $datetime_now && $datetime_end < $datetime_now) {
+                    //end
+                    $election_status = "End";
+                    $class = "secondary";
+                    $href = "#";
                 }
             ?>
             <div class="col-md-4 mb-1">
