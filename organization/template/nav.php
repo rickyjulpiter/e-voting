@@ -23,7 +23,7 @@
                 <a class="nav-link" href="./voters">Voters</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Result</a>
+                <a class="nav-link" href="./result">Result</a>
             </li>
             </li>
             <li class="nav-item">
