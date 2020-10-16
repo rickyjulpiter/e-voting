@@ -20,7 +20,7 @@
     </nav>
     <div class="container mt-4">
         <h3 class="mb-3">Welcome</h3>
-        <div class="row">
+        <div class="row mx-auto">
             <!-- <div class="col-md-4 mb-1">
                 <div class="card mb-3">
                     <div class="card-body">
@@ -32,7 +32,7 @@
 
                 </div>
             </div> -->
-            <div class="col-md-4 mb-1">
+            <div class="col-md-4 mb-1 mx-auto">
                 <div class="card mb-3">
                     <div class="card-body">
                         Login as Organization
@@ -42,7 +42,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 mb-1">
+            <div class="col-md-4 mb-1 mx-auto">
                 <div class="card mb-3">
                     <div class="card-body">
                         Login as Voters
