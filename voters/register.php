@@ -11,7 +11,9 @@ if (isset($_POST['btn-register'])) {
     $phone = htmlentities($_POST['phone']);
     $organization_id = htmlentities(decodeURL($_POST['organization']));
     $faculty_id = htmlentities(decodeURL($_POST['faculty']));
-    $password = htmlentities(hashSHA384($_POST['password']));
+    // $password = htmlentities(hashSHA384($_POST['password']));
+
+    $password = rand(272819, 2838958192);
 
     $sql = $pdo->prepare("SELECT * FROM voters WHERE username = :username");
     $sql->bindParam(':username', $username);
@@ -22,21 +24,40 @@ if (isset($_POST['btn-register'])) {
         header("Location: register");
         exit();
     } else {
-        $query = "INSERT INTO voters (username, password, name, email, phone, faculty_id, organization_id) VALUES (:username, :password, :name, :email, :phone, :faculty_id, :organization_id)";
 
-        $sql = $pdo->prepare($query);
-        $sql->bindParam(':username', $username);
-        $sql->bindParam(':name', $name);
-        $sql->bindParam(':email', $email);
-        $sql->bindParam(':phone', $phone);
-        $sql->bindParam(':organization_id', $organization_id);
-        $sql->bindParam(':faculty_id', $faculty_id);
-        $sql->bindParam(':password', $password);
-        if ($sql->execute()) {
-            message_success("Successfuly Register");
-            header("Location: ./");
-            exit();
-        } else {
+        $emailDestination = $email;
+        $emailFrom = "e-voting@sistempintar.com";
+        $subject = "E-Voting: Voter's Code";
+        $message = "Code: " . rand(272819, 2838958192);
+
+        // send email
+        try {
+            if (mail($emailDestination, $subject, $message)) {
+                $query = "INSERT INTO voters (username, password, name, email, phone, faculty_id, organization_id) VALUES (:username, :password, :name, :email, :phone, :faculty_id, :organization_id)";
+
+                $sql = $pdo->prepare($query);
+                $sql->bindParam(':username', $username);
+                $sql->bindParam(':name', $name);
+                $sql->bindParam(':email', $email);
+                $sql->bindParam(':phone', $phone);
+                $sql->bindParam(':organization_id', $organization_id);
+                $sql->bindParam(':faculty_id', $faculty_id);
+                $sql->bindParam(':password', $password);
+                if ($sql->execute()) {
+                    message_success("Successfuly Register, check your email for password account");
+                    header("Location: ./");
+                    exit();
+                } else {
+                    message_failed("Failed Register");
+                    header("Location: register");
+                    exit();
+                }
+            } else {
+                message_failed("Failed Register");
+                header("Location: register");
+                exit();
+            }
+        } catch (Exception $e) {
             message_failed("Failed Register");
             header("Location: register");
             exit();
@@ -94,11 +115,6 @@ if (isset($_POST['btn-register'])) {
                                 </select>
                             </div>
                             <div id="faculty"></div>
-                            <div class="form-group">
-                                <label>Password</label>
-                                <input type="password" class="form-control" placeholder="Password" name="password"
-                                    required>
-                            </div>
                             <button type="submit" id="btn-register" class="btn btn-info btn-block"
                                 name="btn-register">Register</button>
                             <small class="float-right mt-2">or <a href="./">Login Here</a> </small>
