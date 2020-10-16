@@ -34,7 +34,6 @@ if ($sql->execute()) {
                                         <th class="text-center">In</th>
                                         <th class="text-center">Limit</th>
                                         <th class="text-center">Accepted</th>
-
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -57,7 +56,7 @@ if ($sql->execute()) {
                                     ?>
                                     <tr>
                                         <td><?= $no++ ?></td>
-                                        <td class="text-center"><?= $row['name'] ?></td>
+                                        <td><?= $row['name'] ?></td>
                                         <td class="text-center"><?= $countFaculty['facultyCount'] ?></td>
                                         <td class="text-center"><?= $row['max_voters'] ?></td>
                                         <td class="text-center"><?= $accepted ?></td>
@@ -78,7 +77,7 @@ if ($sql->execute()) {
                         <span class="badge badge-primary p-2">Election Result</span>
                     </div>
                     <div class="card-body">
-                        <table id="example" class="table table-striped table-bordered">
+                        <table class="table table-striped table-bordered">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -95,7 +94,8 @@ if ($sql->execute()) {
                                 $result = $pdo->query($query);
                                 while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                                     $candidate_id = $row['id'];
-                                    $queryCountVote = "SELECT COUNT(A.id) AS voteTotal FROM voting A, voters B WHERE A.candidate_id = '$candidate_id' AND A.voters_id = B.id";
+
+                                    $queryCountVote = "SELECT COUNT(A.id) AS voteTotal FROM voting A, voters B WHERE A.candidate_id = '$candidate_id' AND A.voters_id = B.id AND A.status = 1";
                                     $resultVote = $pdo->query($queryCountVote);
                                     while ($rowVote = $resultVote->fetch(PDO::FETCH_ASSOC)) {
                                         $voteTotalCandidate = $rowVote['voteTotal'];

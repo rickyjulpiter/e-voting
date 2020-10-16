@@ -25,7 +25,7 @@ if (isset($_POST['btn-login'])) {
         } else {
             //jika tidak ada usernya
             message_failed("Sorry, your username or password not found");
-            header("Location: login ");
+            header("Location: ./ ");
             exit();
         }
     }

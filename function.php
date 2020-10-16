@@ -80,3 +80,34 @@ function urlTrack()
         $_SERVER['REQUEST_URI']
     );
 }
+
+function getMaxVotersFaculty($faculty_id, $organization_id)
+{
+    global $pdo;
+    $query = "SELECT * FROM faculty WHERE id = '$faculty_id' AND organization_id = '$organization_id'";
+    $sql = $pdo->prepare($query);
+    if ($sql->execute()) {
+        $data = $sql->fetch();
+        $max_voters = $data['max_voters'];
+        return ($max_voters);
+    }
+}
+
+function getCountVotersNow($faculty_id, $election_id, $organization_id)
+{
+    global $pdo;
+    $query =
+        "SELECT COUNT(voting.id) AS countVotersNow 
+        FROM voting, voters, faculty 
+        WHERE voting.voters_id = voters.id 
+        AND voters.faculty_id = faculty.id 
+        AND voters.faculty_id = '$faculty_id' 
+        AND voters.organization_id = '$organization_id' 
+        AND voting.election_id = '$election_id'";
+    $sql = $pdo->prepare($query);
+    if ($sql->execute()) {
+        $data = $sql->fetch();
+        $count_voters = $data['countVotersNow'];
+        return ($count_voters);
+    }
+}

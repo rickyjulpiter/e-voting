@@ -13,18 +13,29 @@ $voters_id = decodeURL($_SESSION['voters_id']);
 
 if (isset($_POST['btn-choose'])) {
     $candidate_id = decodeURL($_POST['candidate']);
+    $faculty_id = decodeURL($_SESSION['faculty_id']);
 
-    $query = "INSERT INTO voting (voters_id, candidate_id, election_id) VALUES (:voters_id, :candidate_id, :election_id)";
+    $max_voters = getMaxVotersFaculty($faculty_id, $organization_id);
+    $count_voters_now = getCountVotersNow($faculty_id, $election_id, $organization_id);
+
+    if ($max_voters <= $count_voters_now) {
+        $query = "INSERT INTO voting (voters_id, candidate_id, election_id, status) VALUES (:voters_id, :candidate_id, :election_id, :status)";
+        $status = 0;
+    } elseif ($max_voters > $count_voters_now) {
+        $query = "INSERT INTO voting (voters_id, candidate_id, election_id, status) VALUES (:voters_id, :candidate_id, :election_id, :status)";
+        $status = 1;
+    }
+    $q = "INSERT INTO voting (voters_id, candidate_id, election_id, status) VALUES ('$voters_id', '$candidate_id', '$election_id', '$status')";
     $sql = $pdo->prepare($query);
     $sql->bindParam(':voters_id', $voters_id);
     $sql->bindParam(':candidate_id', $candidate_id);
     $sql->bindParam(':election_id', $election_id);
+    $sql->bindParam(':status', $status);
     if ($sql->execute()) {
-        message_success("Thank you for participation");
         header("Location: " . urlTrack());
         exit();
     } else {
-        message_failed("Something, wrong. Please contact administrator");
+        message_failed("Something not working, please contact administrator");
         header("Location: " . urlTrack());
         exit();
     }
