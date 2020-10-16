@@ -13,7 +13,8 @@ if (isset($_POST['btn-register'])) {
     $faculty_id = htmlentities(decodeURL($_POST['faculty']));
     // $password = htmlentities(hashSHA384($_POST['password']));
 
-    $password = rand(272819, 2838958192);
+    $randomPassword = rand(272819, 2838958192);
+    $password = hashSHA384($randomPassword);
 
     $sql = $pdo->prepare("SELECT * FROM voters WHERE username = :username");
     $sql->bindParam(':username', $username);
@@ -28,7 +29,7 @@ if (isset($_POST['btn-register'])) {
         $emailDestination = $email;
         $emailFrom = "e-voting@sistempintar.com";
         $subject = "E-Voting: Voter's Code";
-        $message = "Code: " . rand(272819, 2838958192);
+        $message = "Username: ".$username." | Code: " . $randomPassword;
 
         // send email
         try {
