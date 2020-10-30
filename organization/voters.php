@@ -5,6 +5,29 @@
 include('template/head.php');
 adminOrganization($_SESSION);
 $organization_id = decodeURL($_SESSION['organization_id']);
+
+if (isset($_GET['target'])) {
+    $targetID = decodeURL($_GET['target']);
+    if (isset($_GET['verif'])) {
+        $status = 1;
+    }
+
+    if (isset($_GET['unverif'])) {
+        $status = 0;
+    }
+
+    $sql = $pdo->prepare("UPDATE voters SET status = '$status' WHERE id = :id");
+    $sql->bindParam(':id', $targetID);
+    if ($sql->execute()) {
+        message_success("Successfully update status");
+        header("Location: voters");
+        exit();
+    } else {
+        message_failed("Failed update status");
+        header("Location: voters");
+        exit();
+    }
+}
 ?>
 
 <body>
@@ -17,6 +40,7 @@ $organization_id = decodeURL($_SESSION['organization_id']);
                         <span class="badge badge-primary p-2">Voters List</span>
                     </div>
                     <div class="card-body">
+                        <?php message_check() ?>
                         <div class="table-responsive">
                             <table id="example" class="table table-striped table-bordered">
                                 <thead>
@@ -32,7 +56,7 @@ $organization_id = decodeURL($_SESSION['organization_id']);
                                 <tbody>
                                     <?php
                                     $no = 1;
-                                    $result = $pdo->query("SELECT A.name, A.email, A.phone, B.name AS faculty_name, A.status FROM voters A, faculty B WHERE A.organization_id = '$organization_id' AND A.faculty_id = B.id ORDER BY A.id DESC");
+                                    $result = $pdo->query("SELECT A.id,     A.name, A.email, A.phone, B.name AS faculty_name, A.status FROM voters A, faculty B WHERE A.organization_id = '$organization_id' AND A.faculty_id = B.id ORDER BY A.id DESC");
                                     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 
                                     ?>
@@ -45,9 +69,9 @@ $organization_id = decodeURL($_SESSION['organization_id']);
                                         <td>
                                             <?php
                                                 if ($row['status'] == 1) {
-                                                    echo "<span class='badge badge-info'>Verified</span>";
+                                                    echo "<a href='?target=" . encodeURL($row['id']) . "&unverif' class='btn btn-sm btn-info'>Verified</a>";
                                                 } else {
-                                                    echo "<span class='badge badge-warning'>Unverified</span>";
+                                                    echo "<a href='?target=" . encodeURL($row['id']) . "&verif' class='btn btn-sm btn-warning'>Unverified</a>";
                                                 }
                                                 ?>
                                         </td>

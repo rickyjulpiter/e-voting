@@ -1,15 +1,16 @@
 <!doctype html>
 <html lang="en">
 
-<?php include('template/head.php') ?>
-<?php
+<?php include('template/head.php');
+
+// echo hashSHA384("kmb@kmb.kmb");
 
 if (isset($_POST['btn-login'])) {
-    $username = htmlentities($_POST['username']);
+    $email = htmlentities($_POST['email']);
     $password = hashSHA384(htmlentities($_POST['password']));
 
-    $sql = $pdo->prepare("SELECT * FROM organizations WHERE BINARY username=:username AND BINARY password=:password");
-    $sql->bindParam(':username', $username);
+    $sql = $pdo->prepare("SELECT * FROM organizations WHERE BINARY email=:email AND BINARY password=:password");
+    $sql->bindParam(':email', $email);
     $sql->bindParam(':password', $password);
     if ($sql->execute()) {
         $data = $sql->fetch();
@@ -22,7 +23,7 @@ if (isset($_POST['btn-login'])) {
             exit();
         } else {
             //jika tidak ada usernya
-            message_failed("Sorry, your username or password not found");
+            message_failed("Sorry, your email or password not found");
             header("Location: login ");
             exit();
         }
@@ -46,14 +47,13 @@ if (isset($_POST['btn-login'])) {
                             message_check();
                             ?>
                             <div class="form-group">
-                                <label>Username</label>
-                                <input type="text" class="form-control" name="username"
-                                    placeholder="Please enter organization username" required>
+                                <label>Email</label>
+                                <input type="email" class="form-control" name="email" placeholder="Email" required>
                             </div>
                             <div class="form-group">
                                 <label>Password</label>
-                                <input type="password" class="form-control" placeholder="Password for organization"
-                                    name="password" required>
+                                <input type="password" class="form-control" placeholder="Password" name="password"
+                                    required>
                             </div>
                             <button type="submit" class="btn btn-primary float-right" name="btn-login">Login</button>
                         </form>

@@ -5,7 +5,7 @@
 
 <?php
 if (isset($_POST['btn-register'])) {
-    $username = htmlentities($_POST['username']);
+    $username = htmlentities(string_formatter($_POST['name']));
     $name = htmlentities($_POST['name']);
     $email = htmlentities($_POST['email']);
     $phone = htmlentities($_POST['phone']);
@@ -16,20 +16,19 @@ if (isset($_POST['btn-register'])) {
     $randomPassword = rand(272819, 2838958192);
     $password = hashSHA384($randomPassword);
 
-    $sql = $pdo->prepare("SELECT * FROM voters WHERE username = :username");
-    $sql->bindParam(':username', $username);
+    $sql = $pdo->prepare("SELECT * FROM voters WHERE email = :email");
+    $sql->bindParam(':username', $email);
     $sql->execute();
     $data = $sql->fetch(PDO::FETCH_ASSOC);
     if ($data > 0) {
-        message_failed("Username already taken");
+        message_failed("Email already taken");
         header("Location: register");
         exit();
     } else {
-
         $emailDestination = $email;
         $emailFrom = "e-voting@sistempintar.com";
         $subject = "E-Voting: Voter's Code";
-        $message = "Username: ".$username." | Code: " . $randomPassword;
+        $message = "Username: " . $username . " | Code: " . $randomPassword;
 
         // send email
         try {
@@ -82,19 +81,21 @@ if (isset($_POST['btn-register'])) {
                             <?php
                             message_check();
                             ?>
-                            <div class="form-group">
+                            <!-- <div class="form-group">
                                 <label>Username</label>
-                                <input type="text" class="form-control" id="username" name="username"
+                                <input type="hidden" class="form-control" id="username" name="username"
                                     placeholder="Username" autocomplete="off" required>
                                 <div id="result"></div>
-                            </div>
+                            </div> -->
                             <div class="form-group">
                                 <label>Name</label>
                                 <input type="text" class="form-control" name="name" placeholder="Name" required>
                             </div>
                             <div class="form-group">
                                 <label>Email</label>
-                                <input type="email" class="form-control" name="email" placeholder="Email" required>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="Email"
+                                    required>
+                                <div id="result"></div>
                             </div>
                             <div class="form-group">
                                 <label>Phone</label>
@@ -147,24 +148,24 @@ if (isset($_POST['btn-register'])) {
 
     <script type="text/javascript">
     $(document).ready(function() {
-        $('#username').keyup(function() {
-            var uname = $('#username').val();
+        $('#email').keyup(function() {
+            var uname = $('#email').val();
             if (uname == 0) {
                 $('#result').text('');
             } else {
                 $.ajax({
-                    url: 'checkUsername.php',
+                    url: 'checkEmail.php',
                     type: 'POST',
-                    data: 'username=' + uname,
+                    data: 'email=' + uname,
                     success: function(hasil) {
                         if (hasil > 0) {
                             document.getElementById("result").innerHTML = `
-                            <small class="text-danger">Username already taken</small>
+                            <small class="text-danger">Email already taken</small>
                             `
                             document.getElementById("btn-register").disabled = true;
                         } else {
                             document.getElementById("result").innerHTML = `
-                            <small class="text-success">Username is avalaible</small>
+                            <small class="text-success">Email is avalaible</small>
                             `
                             document.getElementById("btn-register").disabled = false;
                         }

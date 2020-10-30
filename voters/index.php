@@ -5,26 +5,34 @@
 include('template/head.php');
 
 if (isset($_POST['btn-login'])) {
-    $username = htmlentities($_POST['username']);
+    $email = htmlentities($_POST['email']);
     $password = hashSHA384(htmlentities($_POST['password']));
 
-    $sql = $pdo->prepare("SELECT * FROM voters WHERE BINARY username=:username AND BINARY password=:password");
-    $sql->bindParam(':username', $username);
+    $sql = $pdo->prepare("SELECT * FROM voters WHERE BINARY email=:email AND BINARY password=:password");
+    $sql->bindParam(':email', $email);
     $sql->bindParam(':password', $password);
     if ($sql->execute()) {
         $data = $sql->fetch();
-        if ($data > 0) {
-            //jika ada usernya
-            $_SESSION['voters-login'] = true;
-            $_SESSION['username'] = encodeURL($data['username']);
-            $_SESSION['voters_id'] = encodeURL($data['id']);
-            $_SESSION['organization_id'] = encodeURL($data['organization_id']);
-            $_SESSION['faculty_id'] = encodeURL($data['faculty_id']);
-            header("Location: election");
-            exit();
+        if ($data['status'] != 0) {
+            //voters sudah aktif
+            if ($data > 0) {
+                //jika ada usernya
+                $_SESSION['voters-login'] = true;
+                $_SESSION['username'] = encodeURL($data['email']);
+                $_SESSION['voters_id'] = encodeURL($data['id']);
+                $_SESSION['organization_id'] = encodeURL($data['organization_id']);
+                $_SESSION['faculty_id'] = encodeURL($data['faculty_id']);
+                header("Location: election");
+                exit();
+            } else {
+                //jika tidak ada usernya
+                message_failed("Sorry, your email or password not found");
+                header("Location: ./ ");
+                exit();
+            }
         } else {
-            //jika tidak ada usernya
-            message_failed("Sorry, your username or password not found");
+            //voters belum aktif
+            message_failed("Sorry, your account is  inactive");
             header("Location: ./ ");
             exit();
         }
@@ -48,8 +56,8 @@ if (isset($_POST['btn-login'])) {
                             message_check();
                             ?>
                             <div class="form-group">
-                                <label>Username</label>
-                                <input type="text" class="form-control" name="username" placeholder="Username" required>
+                                <label>Email</label>
+                                <input type="email" class="form-control" name="email" placeholder="Email" required>
                             </div>
                             <div class="form-group">
                                 <label>Password</label>
