@@ -14,7 +14,7 @@ $organization_id = decodeURL($_SESSION['organization_id']);
         <hr>
         <div class="row">
             <?php
-            $query = "SELECT * FROM election WHERE organization_id = '$organization_id' ORDER BY id DESC";
+            $query = "SELECT * FROM election WHERE organization_id = '$organization_id' AND status = 1 ORDER BY id DESC";
             $result = $pdo->query($query);
             while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                 $date_start = $row['date_start'];
