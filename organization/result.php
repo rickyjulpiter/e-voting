@@ -2,6 +2,7 @@
 <html lang="en">
 
 <?php
+date_default_timezone_set('Asia/Jakarta');
 include('template/head.php');
 adminOrganization($_SESSION);
 $organization_id = decodeURL($_SESSION['organization_id']);
@@ -47,7 +48,6 @@ $organization_id = decodeURL($_SESSION['organization_id']);
                                         $id = encodeURL($row['id']);
                                         if ($datetime_start <= $datetime_now && $datetime_end >= $datetime_now) {
                                             //sedang berlangsung
-
                                             $action = "<a href='result-detail?target=" . $id . "' class='btn btn-outline-primary btn-sm'>Show Result</a>";
                                         } elseif ($datetime_start > $datetime_now && $datetime_end > $datetime_now) {
                                             //coming soon

@@ -2,6 +2,7 @@
 <html lang="en">
 
 <?php
+date_default_timezone_set('Asia/Jakarta');
 include('template/head.php');
 votersOrganization($_SESSION);
 $organization_id = decodeURL($_SESSION['organization_id']);
