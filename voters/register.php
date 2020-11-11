@@ -104,7 +104,7 @@ if (isset($_POST['btn-register'])) {
                             </div>
                             <div class="form-group">
                                 <label>Organization</label>
-                                <select onchange="getOrg(this.value)" class="form-control" name="organization">
+                                <select onchange="getOrg(this.value)" class="form-control" name="organization" required>
                                     <option disabled selected value> -- select organization -- </option>
                                     <?php
                                     $result = $pdo->query("SELECT * FROM organizations WHERE status = 1 ORDER BY id DESC");

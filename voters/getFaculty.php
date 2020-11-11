@@ -1,7 +1,7 @@
 <?php include('template/head.php') ?>
 <div class="form-group">
     <label>Faculty</label>
-    <select class="form-control" name="faculty">
+    <select class="form-control" name="faculty" required>
         <option disabled selected value> -- select faculty -- </option>
         <?php
         $q = htmlentities(decodeURL($_GET['q']));
