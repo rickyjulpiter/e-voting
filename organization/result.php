@@ -24,7 +24,7 @@ $organization_id = decodeURL($_SESSION['organization_id']);
                                     <tr>
                                         <th>No</th>
                                         <th>Election Name</th>
-                                        <th class="text-center">Action</th>
+                                        <th class="text-center">#</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -42,7 +42,7 @@ $organization_id = decodeURL($_SESSION['organization_id']);
 
                                         $datetime_start = date('Y-m-d H:i:s', strtotime("$date_start $time_start"));
                                         $datetime_end = date('Y-m-d H:i:s', strtotime("$date_end $time_end"));
-                                        $datetime_now = date('Y-m-d H:i:s', strtotime("$date_now $time_now"));
+                                        $datetime_now = date("Y-m-d H:i:s");
 
                                         //election id
                                         $id = encodeURL($row['id']);

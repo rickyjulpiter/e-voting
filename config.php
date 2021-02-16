@@ -5,7 +5,7 @@
 // $password = "";
 // $database = "e-voting";
 
-// sistempintar server
+//sistempintar server
 $host = "localhost";
 $username = "u9070309_e-vote";
 $password = "A%xz*yep]lc8";

@@ -23,13 +23,12 @@ $organization_id = decodeURL($_SESSION['organization_id']);
                 $time_start = $row['time_start'];
                 $time_end = $row['time_end'];
 
-                $date_now = date("Y-m-d");
-                $time_now = date("h:i:s");
+                // $date_now = date("Y-m-d");
+                // $time_now = date("h:i:s");
 
                 $datetime_start = date('Y-m-d H:i:s', strtotime("$date_start $time_start"));
                 $datetime_end = date('Y-m-d H:i:s', strtotime("$date_end $time_end"));
-                $datetime_now = date('Y-m-d H:i:s', strtotime("$date_now $time_now"));
-
+                $datetime_now = date("Y-m-d H:i:s");
                 if ($datetime_start <= $datetime_now && $datetime_end >= $datetime_now) {
                     //sedang berlangsung
                     $election_status = "Live";
