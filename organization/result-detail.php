@@ -18,7 +18,7 @@ if ($sql->execute()) {
     <?php include('template/nav.php') ?>
     <div class="m-4">
         <div class="row">
-            <div class="col-md-6">
+            <!-- <div class="col-md-6">
                 <div class="card mb-3">
                     <div class="card-header">
                         <span class="badge badge-primary p-2">Result Detail : </span>
@@ -70,7 +70,7 @@ if ($sql->execute()) {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
