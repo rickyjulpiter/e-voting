@@ -80,7 +80,7 @@ if (isset($_GET['delete'])) {
 
 <body>
     <?php include('template/nav.php') ?>
-    <div class="container mt-4">
+    <div class="container-fluid mt-4">
         <div class="row">
             <div class="col-md-8">
                 <div class="card mb-3">
@@ -94,8 +94,8 @@ if (isset($_GET['delete'])) {
                                     <tr>
                                         <th>No</th>
                                         <th>Name</th>
-                                        <th>Max Accepted Voters</th>
-                                        <th>Action</th>
+                                        <th class="text-center">Max Accepted Voters</th>
+                                        <th class="text-center">#</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -107,12 +107,16 @@ if (isset($_GET['delete'])) {
                                     <tr>
                                         <td><?= $no++ ?></td>
                                         <td><?= $row['name'] ?></td>
-                                        <td><?= $row['max_voters'] ?></td>
-                                        <td>
+                                        <td class="text-center"><?= $row['max_voters'] ?></td>
+                                        <td class="text-center">
                                             <a href="?edit&target=<?= encodeURL($row['id']) ?>"
-                                                class="btn btn-outline-primary btn-sm">Edit</a>
+                                                class="btn btn-outline-primary btn-sm">
+                                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                                            </a>
                                             <a href="?delete&target=<?= encodeURL($row['id']) ?>"
-                                                class="btn btn-outline-danger btn-sm">Delete</a>
+                                                class="btn btn-outline-danger btn-sm">
+                                                <i class="fa fa-trash" aria-hidden="true"></i>
+                                            </a>
                                         </td>
                                     </tr>
                                     <?php } ?>

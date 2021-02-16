@@ -42,7 +42,7 @@ if (isset($_POST['btn-login'])) {
 
 <body>
     <?php include('template/nav.php') ?>
-    <div class="container mt-4">
+    <div class="container-fluid mt-4">
         <div class="row">
             <div class="col-md-6 mb-2">
                 <img src="assets/sistempintar.png" class="card-img img-fluid" alt="...">

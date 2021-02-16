@@ -43,7 +43,7 @@ function message_success($message)
 {
     $_SESSION['message'] = '
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <span class="text-secondary">' . $message . '</span>
+                        <span class="text-white">' . $message . '</span>
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -55,7 +55,7 @@ function message_failed($message)
 {
     $_SESSION['message'] = '
                     <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                        <span class="text-secondary">' . $message . '</span>
+                        <span class="text-white">' . $message . '</span>
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>

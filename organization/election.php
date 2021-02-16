@@ -63,7 +63,7 @@ if (isset($_GET['delete'])) {
     <?php include('template/nav.php') ?>
     <div class="m-4">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-9">
                 <div class="card mb-3">
                     <div class="card-header">
                         <span class="badge badge-primary p-2">Election List</span>
@@ -79,7 +79,7 @@ if (isset($_GET['delete'])) {
                                         <th>Time Start</th>
                                         <th>Date End</th>
                                         <th>Time End</th>
-                                        <th>Action</th>
+                                        <th class="text-center">#</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -97,11 +97,15 @@ if (isset($_GET['delete'])) {
                                         <td><?= $row['time_start'] ?></td>
                                         <td><?= $row['date_end'] ?></td>
                                         <td><?= $row['time_end'] ?></td>
-                                        <td>
+                                        <td class="text-center">
                                             <a href="?edit&target=<?= encodeURL($row['id']) ?>"
-                                                class="btn btn-outline-primary btn-sm">Edit</a>
+                                                class="btn btn-outline-primary btn-sm">
+                                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                                            </a>
                                             <a href="?delete&target=<?= encodeURL($row['id']) ?>"
-                                                class="btn btn-outline-danger btn-sm">Delete</a>
+                                                class="btn btn-outline-danger btn-sm">
+                                                <i class="fa fa-trash" aria-hidden="true"></i>
+                                            </a>
                                         </td>
                                     </tr>
                                     <?php } ?>

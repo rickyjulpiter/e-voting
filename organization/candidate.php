@@ -78,7 +78,7 @@ if (isset($_GET['delete'])) {
                                         <th>Name</th>
                                         <th>Election</th>
                                         <th>Notes</th>
-                                        <th>Action</th>
+                                        <th class="text-center">#</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -93,11 +93,15 @@ if (isset($_GET['delete'])) {
                                         <td><?= $row['name'] ?></td>
                                         <td><?= $row['electionName'] ?></td>
                                         <td><?= $row['notes'] ?></td>
-                                        <td>
+                                        <td class="text-center">
                                             <a href="?edit&target=<?= encodeURL($row['id']) ?>"
-                                                class="btn btn-outline-primary btn-sm">Edit</a>
+                                                class="btn btn-outline-primary btn-sm">
+                                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                                            </a>
                                             <a href="?delete&target=<?= encodeURL($row['id']) ?>"
-                                                class="btn btn-outline-danger btn-sm">Delete</a>
+                                                class="btn btn-outline-danger btn-sm">
+                                                <i class="fa fa-trash" aria-hidden="true"></i>
+                                            </a>
                                         </td>
                                     </tr>
                                     <?php } ?>
