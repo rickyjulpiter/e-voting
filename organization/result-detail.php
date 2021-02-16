@@ -71,7 +71,7 @@ if ($sql->execute()) {
                     </div>
                 </div>
             </div> -->
-            <div class="col-md-6">
+            <div class="col-md-6 mx-auto">
                 <div class="card">
                     <div class="card-header">
                         <span class="badge badge-primary p-2">Election Result</span>

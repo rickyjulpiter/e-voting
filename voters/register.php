@@ -14,7 +14,9 @@ if (isset($_POST['btn-register'])) {
     // $password = htmlentities(hashSHA384($_POST['password']));
 
     $randomPassword = rand(272819, 2838958192);
-    $password = hashSHA384($randomPassword);
+    // $password = hashSHA384($randomPassword);
+
+    $password = hashSHA384("namaposo");
 
     $sql = $pdo->prepare("SELECT * FROM voters WHERE email = :email");
     $sql->bindParam(':username', $email);
