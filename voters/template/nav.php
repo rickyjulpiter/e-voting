@@ -9,7 +9,7 @@
         <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="./">Home</a>
+                    <a class="nav-link" href="election">Home</a>
                 </li>
                 <?php
                 if (isset($_SESSION['voters-login'])) {
