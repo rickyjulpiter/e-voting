@@ -62,7 +62,7 @@ if (isset($_GET['target'])) {
                                     ?>
                                     <tr>
                                         <td><?= $no++ ?></td>
-                                        <td><?= $row['name'] ?></td>
+                                        <td><?= ucwords($row['name']) ?></td>
                                         <td><?= $row['email'] ?></td>
                                         <td><?= $row['phone'] ?></td>
                                         <td><?= $row['faculty_name'] ?></td>
