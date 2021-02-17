@@ -58,6 +58,34 @@ if (isset($_GET['delete'])) {
     header("Location: candidate");
     exit();
 }
+
+if (isset($_POST['btn-add-voters-as-candidate'])) {
+    $election_id = decodeURL($_POST['election']);
+    $organization_id = $organization_id;
+
+    $query = "SELECT name FROM voters WHERE status = 1 AND organization_id = '$organization_id'";
+    $result = $pdo->query($query);
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+        //proses memasukkan nama pemilih ke kandidat
+        $name = $row['name'];
+
+        //setelah dapat nama, maka di cek dulu di kandidat, apakah sudah ada nama yang sama atau engga
+        $querycek = "SELECT * FROM candidate WHERE name = '$name' AND organization_id = '$organization_id' AND election_id = '$election_id' ";
+        $sqlcek = $pdo->prepare($querycek);
+        $sqlcek->execute();
+        $datacek = $sqlcek->fetch();
+        if ($datacek > 0) {
+            //jika sudah ada, tidak usah ditambahkan
+        } else {
+            //jika belum ada tambahkan
+            $queryInsert = "INSERT INTO candidate (name, organization_id, election_id) VALUES ('$name', '$organization_id', '$election_id')";
+            $sql = $pdo->prepare($queryInsert);
+            $sql->execute();
+        }
+    }
+    header("Location: candidate");
+    exit();
+}
 ?>
 
 <body>

@@ -30,7 +30,7 @@ if (isset($_POST['btn-register'])) {
         $emailDestination = $email;
         $emailFrom = "e-voting@sistempintar.com";
         $subject = "E-Voting: Voter's Code";
-        $message = "Email: " . $email . " | Password: " . $randomPassword;
+        $message = "Email: " . $email . " | Password: " . $password;
 
         // send email
         try {

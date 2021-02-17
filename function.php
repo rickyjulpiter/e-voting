@@ -124,3 +124,10 @@ function string_formatter($string)
     $string = preg_replace("/[\s_]/", "-", $string);
     return $string;
 }
+
+function consoleLog($string)
+{
+    return '<script>
+            console.log(' . $string . ')
+        </script>';
+}
